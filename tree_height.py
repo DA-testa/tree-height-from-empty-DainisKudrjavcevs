@@ -24,13 +24,13 @@ def compute_height(n, parents):
 
 def get_input():
     while True:
-        input_method = input().strip().lower()
-        if input_method in ["i", "f"]:
+        input_method = input().strip()
+        if input_method in ["I", "F"]:
             break
         else:
             print("Invalid input method")
     
-    if input_method == "f":
+    if input_method == "F":
         filename = input().strip()
         if filename.endswith(".txt"):
             n, parents = main(filename)
@@ -63,4 +63,3 @@ def main(filename):
 sys.setrecursionlimit(10 ** 7)
 threading.stack_size(2 ** 27)
 threading.Thread(target=get_input).start()
-
