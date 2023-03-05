@@ -19,10 +19,28 @@ def height(x, koks):
 
 
 def main():
-    n = int(input())
-    parents = list(map(int, input().split()))
-
-    print(compute_height(n,parents))
+    method = input().lower()
+    if method == 'i':
+        n = int(input())
+        parents = list(map(int, input().split()))
+    elif method == 'f':
+        valid_filename = False
+        while not valid_filename:
+            try:
+                filename = input()
+                if 'a' in filename:
+                    raise ValueError("Invalid filename")
+                with open(f"./test/{filename}") as f:
+                    n = int(f.readline())
+                    parents = list(map(int, f.readline().split()))
+                    valid_filename = True
+            except (FileNotFoundError, ValueError):
+                print("Invalid file name or format. Try again.")
+    else:
+        print("Invalid input method")
+        return
+    
+    print(compute_height(n, parents))
 
 sys.setrecursionlimit(10**7)
 threading.stack_size(2**27)
