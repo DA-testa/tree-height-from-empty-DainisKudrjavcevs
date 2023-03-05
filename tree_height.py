@@ -13,7 +13,7 @@ def compute_height(n, parents):
         height = 0
         j = i
 
-        while j != -1:
+        for _ in range(int(n)):
             if heights[j] > 0:
                 height += heights[j]
                 break
@@ -29,7 +29,8 @@ def compute_height(n, parents):
     return max_height
 
 
-def input_from_keyboard():
+
+def keyboard():
     n = input().strip()
 
     if n:
@@ -40,7 +41,7 @@ def input_from_keyboard():
     return None, None
 
 
-def input_from_file(filename):
+def file(filename):
     try:
         with open(f"./test/{filename}") as f:
             contents = f.readlines()
@@ -67,19 +68,20 @@ def input_from_file(filename):
 def main():
     input_method = input().strip()
 
-    if input_method == "F":
+    if input_method == "I":
+        n, parents = keyboard()
+        if n and parents:
+            height = compute_height(n, parents)
+            print(int(height))
+
+    elif input_method == "F":
         filename = input().strip()
         if str(filename[-1]) != "a":
-            n, parents = input_from_file(filename)
+            n, parents = file(filename)
             if n and parents:
                 height = compute_height(n, parents)
                 print(int(height))
 
-    elif input_method == "I":
-        n, parents = input_from_keyboard()
-        if n and parents:
-            height = compute_height(n, parents)
-            print(int(height))
 
 
 sys.setrecursionlimit(10 ** 7)  # max depth of recursion
