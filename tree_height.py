@@ -4,30 +4,28 @@ import sys
 import threading
 import numpy
 
-
 def compute_height(n, parents):
-    # Write this function
-    max_height = 0
-    # Your code here
-    return max_height
+    koks = [[] for i in range(n)]
+    for i in range(n):
+        if parents[i] == -1:
+            root = i
+        else :
+            koks[parents[i]].append(i)
+    return height(root, koks)
+
+def height(x, koks):
+    if not koks[x]:
+        return 1
+    else:
+        return max(height(berns, koks) for berns in koks[x]) + 1
 
 
 def main():
-    # implement input form keyboard and from files
-    
-    # let user input file name to use, don't allow file names with letter a
-    # account for github input inprecision
-    
-    # input number of elements
-    # input values in one variable, separate with space, split these values in an array
-    # call the function and output it's result
-    pass
+    n = int(input())
+    parents = list(map(int, input().split()))
 
-# In Python, the default limit on recursion depth is rather low,
-# so raise it here for this problem. Note that to take advantage
-# of bigger stack, we have to launch the computation in a new thread.
-sys.setrecursionlimit(10**7)  # max depth of recursion
-threading.stack_size(2**27)   # new thread will get stack of such size
+    print(compute_height(n,parents))
+
+sys.setrecursionlimit(10**7)
+threading.stack_size(2**27)
 threading.Thread(target=main).start()
-main()
-# print(numpy.array([1,2,3]))
