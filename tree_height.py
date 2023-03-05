@@ -22,44 +22,53 @@ def compute_height(n, parents):
             max_height = height
     return max_height
 
-def get_input():
-    while True:
-        input_method = input().strip()
-        if input_method in ["I", "F"]:
-            break
-        else:
-            print("Invalid input method")
-    
-    if input_method == "F":
-        filename = input().strip()
-        if filename.endswith(".txt"):
-            n, parents = main(filename)
-            if n and parents:
-                height = compute_height(n, parents)
-                print(int(height))
-    else:
-        n = input().strip()
-        if n:
-            parents = input().strip().split(" ")
-            if parents:
-                height = compute_height(n, parents)
-                print(int(height))
-
-def main(filename):
-    try:
-        with open(f"./test/{filename}") as f:
-            contents = f.readlines()
-    except:
-        print("Invalid filename")
-        return None, None
-
-    n = contents[0].strip()
+def input_from_keyboard():
+    n = input().strip()
     if n:
-        parents = contents[1].strip().split(" ")
+        parents = input().strip().split(" ")
         if parents:
             return n, parents
     return None, None
 
-sys.setrecursionlimit(10 ** 7)
-threading.stack_size(2 ** 27)
-threading.Thread(target=get_input).start()
+def input_from_file(filename):
+    try:
+        with open(f"./test/{filename}") as f:
+            contents = f.readlines()
+    except FileNotFoundError:
+        print("File not found")
+        return None, None
+    except:
+        print("Error reading file")
+        return None, None
+    
+    n = contents[0].strip()
+    if not n:
+        print("Invalid input: n not provided")
+        return None, None
+    
+    parents = contents[1].strip().split(" ")
+    if not parents:
+        print("Invalid input: parents not provided")
+        return None, None
+    
+    return n, parents
+
+
+def main():
+    input_method = input().strip()
+    if input_method == "F":
+        filename = input().strip()
+        if str(filename[-1]) != "a":
+            n, parents = input_from_file(filename)
+            if n and parents:
+                height = compute_height(n, parents)
+                print(int(height))
+    elif input_method == "I":
+        n, parents = input_from_keyboard()
+        if n and parents:
+            height = compute_height(n, parents)
+            print(int(height))
+
+sys.setrecursionlimit(10 ** 7)  # max depth of recursion
+threading.stack_size(2 ** 27)  # new thread will get stack of such size
+threading.Thread(target=main).start() 
