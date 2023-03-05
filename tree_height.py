@@ -1,47 +1,66 @@
 import sys
 import threading
-import numpy
+import numpy as np
 
 def compute_height(n, parents):
-    koks = [[] for i in range(n)]
-    for i in range(n):
-        if parents[i] == -1:
-            root = i
-        else :
-            koks[parents[i]].append(i)
-    return height(root, koks)
+    heights = np.zeros(int(n))
+    max_height = 0
+    for i in range(int(n)):
+        if heights[i] > 0:
+            continue
+        height = 0
+        j = i
+        while j != -1:
+            if heights[j] > 0:
+                height += heights[j]
+                break
+            else:
+                height += 1
+                j = int(parents[j])
+        heights[i] = height
+        if height > max_height:
+            max_height = height
+    return max_height
 
-def height(x, koks):
-    if not koks[x]:
-        return 1
-    else:
-        return max(height(berns, koks) for berns in koks[x]) + 1
-
-
-def main():
-    method = input().lower()
-    if method == 'i':
-        n = int(input())
-        parents = list(map(int, input().split()))
-    elif method == 'f':
-        valid_filename = False
-        while not valid_filename:
-            try:
-                filename = input()
-                if 'a' in filename:
-                    raise ValueError("Invalid filename")
-                with open(f"./test/{filename}") as f:
-                    n = int(f.readline())
-                    parents = list(map(int, f.readline().split()))
-                    valid_filename = True
-            except (FileNotFoundError, ValueError):
-                print("Invalid file name or format. Try again.")
-    else:
-        print("Invalid input method")
-        return
+def get_input():
+    while True:
+        input_method = input().strip().lower()
+        if input_method in ["i", "f"]:
+            break
+        else:
+            print("Invalid input method")
     
-    print(compute_height(n, parents))
+    if input_method == "f":
+        filename = input().strip()
+        if filename.endswith(".txt"):
+            n, parents = main(filename)
+            if n and parents:
+                height = compute_height(n, parents)
+                print(int(height))
+    else:
+        n = input().strip()
+        if n:
+            parents = input().strip().split(" ")
+            if parents:
+                height = compute_height(n, parents)
+                print(int(height))
 
-sys.setrecursionlimit(10**7)
-threading.stack_size(2**27)
-threading.Thread(target=main).start()
+def main(filename):
+    try:
+        with open(f"./test/{filename}") as f:
+            contents = f.readlines()
+    except:
+        print("Invalid filename")
+        return None, None
+
+    n = contents[0].strip()
+    if n:
+        parents = contents[1].strip().split(" ")
+        if parents:
+            return n, parents
+    return None, None
+
+sys.setrecursionlimit(10 ** 7)
+threading.stack_size(2 ** 27)
+threading.Thread(target=get_input).start()
+
