@@ -13,7 +13,7 @@ def compute_height(n, parents):
         height = 0
         j = i
 
-        for _ in range(int(n)):
+        while j != -1:
             if heights[j] > 0:
                 height += heights[j]
                 break
@@ -27,7 +27,6 @@ def compute_height(n, parents):
             max_height = height
 
     return max_height
-
 
 
 def keyboard():
